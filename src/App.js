@@ -1,11 +1,6 @@
-import {
-  BrowserRouter as Router,
-  RouterProvider,
-  createBrowserRouter,
-} from 'react-router-dom';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import { Header } from './components';
-import { ErrorPage, Home, Profile, Root, SignIn } from './pages';
+import { ErrorPage, Home, Offers, Profile, Root, SignIn } from './pages';
 
 function App() {
   const router = createBrowserRouter([
@@ -20,22 +15,22 @@ function App() {
           element: <Home />,
         },
         {
-          path: 'profile',
+          path: '/profile',
           element: <Profile />,
         },
+        {
+          path: '/offers',
+          element: <Offers />,
+        },
+        {
+          path: '/signIn',
+          element: <SignIn />,
+        },
       ],
-    },
-
-    {
-      path: '/signIn',
-      element: <SignIn />,
     },
   ]);
   return (
     <>
-      <Router>
-        <Header />
-      </Router>
       <RouterProvider router={router} />
     </>
   );
