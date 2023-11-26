@@ -1,12 +1,42 @@
-import { Route } from 'react-router-dom';
-import './App.css';
-import Home from './pages/Home';
+import {
+  BrowserRouter as Router,
+  RouterProvider,
+  createBrowserRouter,
+} from 'react-router-dom';
+
+import { Header } from './components';
+import { ErrorPage, Home, Profile, Root, SignIn } from './pages';
 
 function App() {
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <Root />,
+      errorElement: <ErrorPage />,
+      children: [
+        {
+          path: '/',
+          index: true,
+          element: <Home />,
+        },
+        {
+          path: 'profile',
+          element: <Profile />,
+        },
+      ],
+    },
+
+    {
+      path: '/signIn',
+      element: <SignIn />,
+    },
+  ]);
   return (
     <>
-      <Route path="/" element={<Home />} />
-      <Route path="about" element={<div>About</div>} />
+      <Router>
+        <Header />
+      </Router>
+      <RouterProvider router={router} />
     </>
   );
 }

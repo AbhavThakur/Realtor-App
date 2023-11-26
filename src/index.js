@@ -1,32 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import './index.css';
 
-import { Home, SignIn } from './pages';
-import Profile from './pages/Profile';
+import LogRocket from 'logrocket';
+import App from './App';
+import './index.css';
 import reportWebVitals from './reportWebVitals';
 
+LogRocket.init('aqn6sg/realtor-app');
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Home />,
-  },
-  {
-    path: '/profile',
-    element: <Profile />,
-  },
-  {
-    path: '/signIn',
-    element: <SignIn />,
-  },
-]);
 
 root.render(
   <React.StrictMode>
-    {/* <App /> */}
-    <RouterProvider router={router} />
+    <App />
   </React.StrictMode>
 );
 
