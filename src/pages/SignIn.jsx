@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { FormButton, OAuth } from '../components';
+import { EmailSignIn } from '../components/AuthProvider';
 
 function SignIn() {
   const [FormData, setFormData] = useState({
@@ -10,6 +12,16 @@ function SignIn() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const { email, password } = FormData;
+
+  const navigate = useNavigate();
+
+  async function onSubmit(e) {
+    e.preventDefault();
+    if (!email || !password) {
+      toast.error('Please fill in all fields');
+    }
+    EmailSignIn(email, password);
+  }
   return (
     <section>
       <h1 className="text-3xl text-center mt-6 font-bold">Sign In</h1>
@@ -24,7 +36,7 @@ function SignIn() {
         </div>
         {/*  */}
         <div className="w-full md:w-[67%] lg:w-[40%] lg:ml-20">
-          <form>
+          <form onSubmit={onSubmit}>
             <input
               type="email"
               id="email"
@@ -88,7 +100,7 @@ function SignIn() {
             <p className="text-center font-semibold mx-4">OR</p>
           </div>
           {/* Sign in with google */}
-          <OAuth />
+          <OAuth navigate={navigate} />
         </div>
       </div>
     </section>

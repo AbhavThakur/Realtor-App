@@ -2,6 +2,7 @@ import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  signInWithEmailAndPassword,
   signInWithPopup,
   updateProfile,
 } from 'firebase/auth';
@@ -48,6 +49,18 @@ export const EmailAuthProvider = async (email, password, name) => {
     });
 };
 
+export const EmailSignIn = async (email, password) => {
+  await signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      // Signed in
+      const user = userCredential.user;
+      toast.success('Sign in successful');
+    })
+    .catch((error) => {
+      const errorMessage = error.message;
+      toast.error(errorMessage);
+    });
+};
 export const GoogleAuth = async () => {
   await signInWithPopup(auth, provider)
     .then(async (result) => {
