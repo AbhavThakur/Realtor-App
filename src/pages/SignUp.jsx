@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 import { FormButton, OAuth } from '../components';
+import { EmailAuthProvider } from '../components/AuthProvider';
 
 function SignUp() {
   const [FormData, setFormData] = useState({
@@ -11,6 +12,11 @@ function SignUp() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const { name, email, password } = FormData;
+
+  async function onSubmit(e) {
+    e.preventDefault();
+    EmailAuthProvider(email, password, name);
+  }
   return (
     <section>
       <h1 className="text-3xl text-center mt-6 font-bold">Sign Up</h1>
@@ -25,7 +31,7 @@ function SignUp() {
         </div>
         {/*  */}
         <div className="w-full md:w-[67%] lg:w-[40%] lg:ml-20">
-          <form>
+          <form onSubmit={onSubmit}>
             <input
               type="text"
               id="name"
