@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { toast } from 'react-toastify';
+
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { Link, useNavigate } from 'react-router-dom';
 import { FormButton, OAuth } from '../components';
@@ -17,10 +19,20 @@ function SignUp() {
 
   async function onSubmit(e) {
     e.preventDefault();
-    const status = EmailAuthProvider(email, password, name);
-    if (status) {
-      navigate('/');
+    if (!name || !email || !password) {
+      toast.error('Please fill in all fields');
+
+      return;
     }
+    if (password.length < 6) {
+      toast.error('Password must be at least 6 characters');
+      return;
+    }
+    if (!email.includes('@')) {
+      toast.error('Please enter a valid email');
+      return;
+    }
+    EmailAuthProvider(email, password, name);
   }
   return (
     <section>
@@ -110,7 +122,7 @@ function SignUp() {
             <p className="text-center font-semibold mx-4">OR</p>
           </div>
           {/* Sign in with google */}
-          <OAuth />
+          <OAuth navigate={navigate} />
         </div>
       </div>
     </section>
