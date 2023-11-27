@@ -17,7 +17,9 @@ export const EmailAuthProvider = async (email, password, name) => {
         email: email,
         timestamp: serverTimestamp(),
       });
+
       toast.success('Account created successfully');
+      return true;
     })
     .catch((error) => {
       const errorMessage = error.message;

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FormButton, OAuth } from '../components';
 import { EmailAuthProvider } from '../components/AuthProvider';
 
@@ -13,9 +13,14 @@ function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const { name, email, password } = FormData;
 
+  const navigate = useNavigate();
+
   async function onSubmit(e) {
     e.preventDefault();
-    EmailAuthProvider(email, password, name);
+    const status = EmailAuthProvider(email, password, name);
+    if (status) {
+      navigate('/');
+    }
   }
   return (
     <section>
