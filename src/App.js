@@ -1,6 +1,15 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import { ErrorPage, Home, Offers, Profile, Root, SignIn } from './pages';
+import {
+  ErrorPage,
+  ForgotPassword,
+  Home,
+  Offers,
+  Profile,
+  Root,
+  SignIn,
+  SignUp,
+} from './pages';
 
 function App() {
   const router = createBrowserRouter([
@@ -23,8 +32,16 @@ function App() {
           element: <Offers />,
         },
         {
-          path: '/signIn',
+          path: '/sign-in',
           element: <SignIn />,
+        },
+        {
+          path: '/sign-up',
+          element: <SignUp />,
+        },
+        {
+          path: '/forgot-password',
+          element: <ForgotPassword />,
         },
       ],
     },

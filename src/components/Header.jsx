@@ -34,10 +34,10 @@ function Header() {
           </Link>
         </div>
         <div>
-          <ul className="flex space-x-10">
+          <ul className="flex space-x-5 whitespace-nowrap">
             <HeaderTitle path="/" title="Home" />
             <HeaderTitle path="/offers" title="Offers" />
-            <HeaderTitle path="/signIn" title="Contact" />
+            <HeaderTitle path="/sign-in" title="Sign In" />
           </ul>
         </div>
       </header>

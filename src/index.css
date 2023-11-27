@@ -2,5 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-header {
+body {
+  background-color: rgba(240, 253, 244);
 }
