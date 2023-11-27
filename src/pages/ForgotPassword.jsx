@@ -1,9 +1,20 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { FormButton } from '../components';
+import { ForgotPasswordProvider } from '../components/AuthProvider';
 
 function ForgotPassword() {
   const [email, setEmail] = useState('');
+
+  function onSubmit(e) {
+    e.preventDefault();
+    if (!email) {
+      toast.error('Please fill in all fields');
+      return;
+    }
+    ForgotPasswordProvider(email);
+  }
   return (
     <section>
       <h1 className="text-3xl text-center mt-6 font-bold">Forgot Password</h1>
@@ -18,7 +29,7 @@ function ForgotPassword() {
         </div>
         {/*  */}
         <div className="w-full md:w-[67%] lg:w-[40%] lg:ml-20">
-          <form>
+          <form onSubmit={onSubmit}>
             <input
               type="email"
               id="email"

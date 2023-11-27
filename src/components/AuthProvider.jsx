@@ -2,6 +2,7 @@ import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   updateProfile,
@@ -61,6 +62,17 @@ export const EmailSignIn = async (email, password) => {
       toast.error(errorMessage);
     });
 };
+
+export const ForgotPasswordProvider = async (email) => {
+  try {
+    await sendPasswordResetEmail(auth, email);
+    toast.success('Password reset email sent');
+  } catch (error) {
+    const errorMessage = error.message;
+    toast.error(errorMessage);
+  }
+};
+
 export const GoogleAuth = async () => {
   await signInWithPopup(auth, provider)
     .then(async (result) => {

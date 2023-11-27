@@ -17,7 +17,7 @@ function SignUp() {
 
   const navigate = useNavigate();
 
-  async function onSubmit(e) {
+  function onSubmit(e) {
     e.preventDefault();
     if (!name || !email || !password) {
       toast.error('Please fill in all fields');
