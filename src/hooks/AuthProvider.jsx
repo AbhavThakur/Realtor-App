@@ -12,67 +12,60 @@ import { auth, db } from '../config/firebase';
 
 const provider = new GoogleAuthProvider();
 export const EmailAuthProvider = async (email, password, name) => {
-  // try {
-  //   const userCredential = await signInWithEmailAndPassword(
-  //     auth,
-  //     email,
-  //     password
-  //   );
-  //   const user = userCredential.user;
-  //   updateProfile(auth.currentUser, {
-  //     displayName: name,
-  //   });
-  //   await setDoc(doc(db, 'users', user.uid), {
-  //     name: name,
-  //     email: email,
-  //     timestamp: serverTimestamp(),
-  //   });
-  //   toast.success('Sign in successful');
-  //   return user;
-  // } catch (error) {
-  //   const errorMessage = error.message;
-  //   toast.error(errorMessage);
-  // }
-  await createUserWithEmailAndPassword(auth, email, password)
-    .then(async (userCredential) => {
-      // Signed up
-      const user = userCredential.user;
+  return new Promise((resolve, reject) => {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(async (userCredential) => {
+        // Signed up
+        const user = userCredential.user;
 
-      updateProfile(auth.currentUser, {
-        displayName: name,
+        updateProfile(auth.currentUser, {
+          displayName: name,
+        });
+
+        await setDoc(doc(db, 'users', user.uid), {
+          name: name,
+          email: email,
+          timestamp: serverTimestamp(),
+        });
+
+        toast.success('Account created successfully');
+        resolve(user);
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        toast.error(errorMessage);
+        reject(errorMessage);
       });
-
-      await setDoc(doc(db, 'users', user.uid), {
-        name: name,
-        email: email,
-        timestamp: serverTimestamp(),
-      });
-
-      toast.success('Account created successfully');
-      return user;
-    })
-    .catch((error) => {
-      const errorMessage = error.message;
-      toast.error(errorMessage);
-    });
+  });
 };
-
 export const SignOut = async () => {
   await auth.signOut();
   toast.success('Sign out successful');
 };
 
+/**
+ * Sign in a user with email and password.
+ *
+ * @param {string} email - The email of the user.
+ * @param {string} password - The password of the user.
+ * @return {Promise<void>} A promise that resolves when the sign in is successful.
+ */
+
 export const EmailSignIn = async (email, password) => {
-  await signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      // Signed in
-      // const user = userCredential.user;
-      toast.success('Sign in successful');
-    })
-    .catch((error) => {
-      const errorMessage = error.message;
-      toast.error(errorMessage);
-    });
+  return new Promise((resolve, reject) => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        // const user = userCredential.user;
+        toast.success('Sign in successful');
+        resolve('Sign in successful');
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        toast.error(errorMessage);
+        reject(errorMessage);
+      });
+  });
 };
 
 export const ForgotPasswordProvider = async (email) => {

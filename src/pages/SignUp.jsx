@@ -17,11 +17,10 @@ function SignUp() {
 
   const navigate = useNavigate();
 
-  function onSubmit(e) {
+  async function onSubmit(e) {
     e.preventDefault();
     if (!name || !email || !password) {
       toast.error('Please fill in all fields');
-
       return;
     }
     if (password.length < 6) {
@@ -32,7 +31,15 @@ function SignUp() {
       toast.error('Please enter a valid email');
       return;
     }
-    EmailAuthProvider(email, password, name);
+    await EmailAuthProvider(email, password, name)
+      .then(() => {
+        navigate('/');
+      })
+      .catch((error) => {
+        // Handle sign-up failure
+        // You can display an error message or take any other necessary action
+        console.error(error);
+      });
   }
   return (
     <section>

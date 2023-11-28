@@ -13,7 +13,7 @@ function useAuthStatus() {
       }
       setCheckingStatus(false);
     });
-  }, []);
+  }, [auth]);
   return { loggedIn, checkingStatus };
 }
 

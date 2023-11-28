@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import useAuthStatus from '../hooks/useAuthStatus';
 
 function Header() {
   const location = useLocation();
@@ -20,6 +21,7 @@ function Header() {
       </li>
     );
   };
+  const { checkingStatus, loggedIn } = useAuthStatus();
 
   return (
     <div className="bg-white border-b shadow-sm sticky top-0 z-50 ">
@@ -37,7 +39,13 @@ function Header() {
           <ul className="flex space-x-5 whitespace-nowrap">
             <HeaderTitle path="/" title="Home" />
             <HeaderTitle path="/offers" title="Offers" />
-            <HeaderTitle path="/sign-in" title="Sign In" />
+            {checkingStatus ? (
+              <HeaderTitle path="/sign-in" title="Sign In" />
+            ) : loggedIn ? (
+              <HeaderTitle path="/profile" title="Profile" />
+            ) : (
+              <HeaderTitle path="/sign-in" title="Sign In" />
+            )}
           </ul>
         </div>
       </header>

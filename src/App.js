@@ -28,13 +28,11 @@ function App() {
         },
         {
           path: '/profile',
-          element: <PrivateRoute />,
-          children: [
-            {
-              path: '/profile',
-              element: <Profile />,
-            },
-          ],
+          element: (
+            <PrivateRoute>
+              <Profile />
+            </PrivateRoute>
+          ),
         },
         {
           path: '/offers',

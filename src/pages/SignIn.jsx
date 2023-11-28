@@ -19,8 +19,16 @@ function SignIn() {
     e.preventDefault();
     if (!email || !password) {
       toast.error('Please fill in all fields');
+      return;
     }
-    EmailSignIn(email, password);
+    try {
+      await EmailSignIn(email, password);
+      navigate('/');
+    } catch (error) {
+      // Handle sign-in failure
+      // You can display an error message or take any other necessary action
+      console.error(error);
+    }
   }
   return (
     <section>
