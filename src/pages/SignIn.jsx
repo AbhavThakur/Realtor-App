@@ -3,7 +3,7 @@ import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { FormButton, OAuth } from '../components';
-import { EmailSignIn } from '../components/AuthProvider';
+import { EmailSignIn } from '../hooks/AuthProvider';
 
 function SignIn() {
   const [FormData, setFormData] = useState({

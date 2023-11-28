@@ -2,6 +2,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import { PrivateRoute } from './components';
 import {
   ErrorPage,
   ForgotPassword,
@@ -27,7 +28,13 @@ function App() {
         },
         {
           path: '/profile',
-          element: <Profile />,
+          element: <PrivateRoute />,
+          children: [
+            {
+              path: '/profile',
+              element: <Profile />,
+            },
+          ],
         },
         {
           path: '/offers',

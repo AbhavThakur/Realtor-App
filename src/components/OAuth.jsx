@@ -1,5 +1,5 @@
 import { FcGoogle } from 'react-icons/fc';
-import { GoogleAuth } from './AuthProvider';
+import { GoogleAuth } from '../hooks/AuthProvider';
 
 function OAuth({ navigate }) {
   return (

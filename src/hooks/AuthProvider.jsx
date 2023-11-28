@@ -1,7 +1,6 @@
 import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
-  onAuthStateChanged,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
@@ -11,22 +10,29 @@ import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 import { auth, db } from '../config/firebase';
 
-export const AuthState = async () => {
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
-      const uid = user.uid;
-      // ...
-    } else {
-      // User is signed out
-      // ...
-    }
-  });
-};
-
 const provider = new GoogleAuthProvider();
 export const EmailAuthProvider = async (email, password, name) => {
+  // try {
+  //   const userCredential = await signInWithEmailAndPassword(
+  //     auth,
+  //     email,
+  //     password
+  //   );
+  //   const user = userCredential.user;
+  //   updateProfile(auth.currentUser, {
+  //     displayName: name,
+  //   });
+  //   await setDoc(doc(db, 'users', user.uid), {
+  //     name: name,
+  //     email: email,
+  //     timestamp: serverTimestamp(),
+  //   });
+  //   toast.success('Sign in successful');
+  //   return user;
+  // } catch (error) {
+  //   const errorMessage = error.message;
+  //   toast.error(errorMessage);
+  // }
   await createUserWithEmailAndPassword(auth, email, password)
     .then(async (userCredential) => {
       // Signed up
@@ -43,6 +49,7 @@ export const EmailAuthProvider = async (email, password, name) => {
       });
 
       toast.success('Account created successfully');
+      return user;
     })
     .catch((error) => {
       const errorMessage = error.message;
@@ -50,11 +57,16 @@ export const EmailAuthProvider = async (email, password, name) => {
     });
 };
 
+export const SignOut = async () => {
+  await auth.signOut();
+  toast.success('Sign out successful');
+};
+
 export const EmailSignIn = async (email, password) => {
   await signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       // Signed in
-      const user = userCredential.user;
+      // const user = userCredential.user;
       toast.success('Sign in successful');
     })
     .catch((error) => {
@@ -77,8 +89,8 @@ export const GoogleAuth = async () => {
   await signInWithPopup(auth, provider)
     .then(async (result) => {
       // This gives you a Google Access Token. You can use it to access the Google API.
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
+      // const credential = GoogleAuthProvider.credentialFromResult(result);
+      // const token = credential.accessToken;
       // The signed-in user info.
       const user = result.user;
 
@@ -100,12 +112,12 @@ export const GoogleAuth = async () => {
     })
     .catch((error) => {
       // Handle Errors here.
-      const errorCode = error.code;
+      // const errorCode = error.code;
       const errorMessage = error.message;
       // The email of the user's account used.
-      const email = error.customData.email;
+      // const email = error.customData.email;
       // The AuthCredential type that was used.
-      const credential = GoogleAuthProvider.credentialFromError(error);
+      // const credential = GoogleAuthProvider.credentialFromError(error);
       toast.error(errorMessage);
       // ...
     });

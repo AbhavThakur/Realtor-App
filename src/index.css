@@ -5,3 +5,19 @@
 body {
   background-color: rgba(240, 253, 244);
 }
+
+.Header {
+  @apply text-3xl text-center mt-6 font-bold;
+}
+
+.FormInput {
+  @apply w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded transition ease-in-out mb-6;
+}
+
+.LinkButton {
+  @apply text-red-600 hover:text-red-800 hover:underline cursor-pointer transition duration-200 ease-in-out ml-1;
+}
+
+.LinkButtonRight {
+  @apply text-blue-600 hover:text-blue-800 hover:underline cursor-pointer transition duration-200 ease-in-out;
+}

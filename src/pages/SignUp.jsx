@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { Link, useNavigate } from 'react-router-dom';
 import { FormButton, OAuth } from '../components';
-import { EmailAuthProvider } from '../components/AuthProvider';
+import { EmailAuthProvider } from '../hooks/AuthProvider';
 
 function SignUp() {
   const [FormData, setFormData] = useState({
@@ -36,7 +36,7 @@ function SignUp() {
   }
   return (
     <section>
-      <h1 className="text-3xl text-center mt-6 font-bold">Sign Up</h1>
+      <h1 className={'Header'}>Sign Up</h1>
       <div className="flex justify-center flex-wrap items-center px-6 py-12 max-w-6xl mx-auto">
         {/* Image container */}
         <div className="md:w-[67%] lg:w-[50%]  mb-12 md:mb-6">
