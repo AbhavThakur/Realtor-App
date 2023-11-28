@@ -2,7 +2,8 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { PrivateRoute } from './components';
+import { PrivateRedirectProfileRoute, PrivateRoute } from './components';
+
 import {
   ErrorPage,
   ForgotPassword,
@@ -40,15 +41,27 @@ function App() {
         },
         {
           path: '/sign-in',
-          element: <SignIn />,
+          element: (
+            <PrivateRedirectProfileRoute>
+              <SignIn />
+            </PrivateRedirectProfileRoute>
+          ),
         },
         {
           path: '/sign-up',
-          element: <SignUp />,
+          element: (
+            <PrivateRedirectProfileRoute>
+              <SignUp />
+            </PrivateRedirectProfileRoute>
+          ),
         },
         {
           path: '/forgot-password',
-          element: <ForgotPassword />,
+          element: (
+            <PrivateRedirectProfileRoute>
+              <ForgotPassword />
+            </PrivateRedirectProfileRoute>
+          ),
         },
       ],
     },
