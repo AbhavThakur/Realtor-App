@@ -1,12 +1,11 @@
 import { Navigate } from 'react-router-dom';
 import useAuthStatus from '../hooks/useAuthStatus';
+import Spinner from './Spinner';
 function PrivateRoute({ children }) {
   const { loggedIn, checkingStatus } = useAuthStatus();
 
   if (checkingStatus) {
-    return (
-      <span className="uppercase text-3xl justify-center ">loading...</span>
-    );
+    return <Spinner />;
   }
 
   if (loggedIn) {
