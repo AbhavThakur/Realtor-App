@@ -1,8 +1,10 @@
 import { updateProfile } from 'firebase/auth';
 import { doc, updateDoc } from 'firebase/firestore';
 import React, { useState } from 'react';
+import { FcHome } from 'react-icons/fc';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { FormButton } from '../components';
 import { auth, db } from '../config/firebase';
 import { SignOut } from '../hooks/AuthProvider';
 
@@ -97,6 +99,11 @@ function Profile() {
               </p>
             </div>
           </form>
+          <FormButton
+            onClick={() => navigate('/create-listing')}
+            title="Sell or Rent your Home"
+            icon={<FcHome size={17} className="mr-2 " />}
+          />
         </div>
       </section>
     </>

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Header",
+  "steps": [
+    {
+      "file": "src/components/Header.jsx",
+      "description": "Created a list component ",
+      "line": 14
+    }
+  ],
+  "ref": "main"
+}

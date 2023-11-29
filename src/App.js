@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { PrivateRedirectProfileRoute, PrivateRoute } from './components';
 
 import {
+  CreateListing,
   ErrorPage,
   ForgotPassword,
   Home,
@@ -38,6 +39,10 @@ function App() {
         {
           path: '/offers',
           element: <Offers />,
+        },
+        {
+          path: '/create-listing',
+          element: <CreateListing />,
         },
         {
           path: '/sign-in',
