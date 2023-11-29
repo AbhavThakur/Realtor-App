@@ -42,7 +42,11 @@ function App() {
         },
         {
           path: '/create-listing',
-          element: <CreateListing />,
+          element: (
+            <PrivateRoute>
+              <CreateListing />
+            </PrivateRoute>
+          ),
         },
         {
           path: '/sign-in',
