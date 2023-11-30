@@ -1,7 +1,20 @@
-import { useState } from 'react';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { v4 as uuidv4 } from 'uuid';
 import { FormButton } from '../components';
+import Spinner from '../components/Spinner';
+import { auth, db, storage } from '../config/firebase';
+import { errors, options } from '../utils/helper';
+
+const APIkey = 'f440762ba8e54ac2b2ac043d4180cd09';
 
 function CreateListing() {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [FormData, setFormData] = useState({
     type: 'rent',
     name: '',
@@ -15,6 +28,8 @@ function CreateListing() {
     regularPrice: 0,
     discountedPrice: 0,
     images: [],
+    latitude: 0,
+    longitude: 0,
   });
   const {
     type,
@@ -29,6 +44,8 @@ function CreateListing() {
     regularPrice,
     discountedPrice,
     images,
+    latitude,
+    longitude,
   } = FormData;
 
   const ButtonOptionComponent = (props) => {
@@ -98,16 +115,145 @@ function CreateListing() {
   };
 
   const onChange = (e) => {
-    let boolean = null;
-    if (e.target.value === 'true') {
-      boolean = true;
-    }
-    if (e.target.value === 'false') {
-      boolean = false;
+    // Files
+    if (e.target.files) {
+      setFormData((prevState) => ({
+        ...prevState,
+        images: e.target.files,
+      }));
     }
   };
-  function onSubmit(e) {
+
+  const [location, setLocation] = useState();
+
+  function getLocationInfo(latitude, longitude) {
+    const url = `https://api.opencagedata.com/geocode/v1/json?q=${latitude},${longitude}&key=${APIkey}`;
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if (data.status.code === 200) {
+          console.log('results:', data.results);
+          setLocation(data.results[0].formatted);
+        } else {
+          console.log('Reverse geolocation request failed.');
+        }
+      })
+      .catch((error) => console.error(error));
+  }
+
+  function success(pos) {
+    var crd = pos.coords;
+    setFormData((prevState) => ({
+      ...prevState,
+      latitude: crd.latitude,
+      longitude: crd.longitude,
+    }));
+
+    // getLocationInfo(crd.latitude, crd.longitude);
+  }
+
+  function getCoordinates() {
+    if (navigator.geolocation) {
+      navigator.permissions
+        .query({ name: 'geolocation' })
+        .then(function (result) {
+          console.log(result);
+          if (result.state === 'granted') {
+            //If granted then you can directly call your function here
+            navigator.geolocation.getCurrentPosition(success, errors, options);
+          } else if (result.state === 'prompt') {
+            //If prompt then the user will be asked to give permission
+            navigator.geolocation.getCurrentPosition(success, errors, options);
+          } else if (result.state === 'denied') {
+            //If denied then you have to show instructions to enable location
+            toast.error('Please enable location');
+          }
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      console.log('Geolocation is not supported by this browser.');
+    }
+  }
+
+  useEffect(() => {
+    setLoading(true);
+    getCoordinates();
+  }, []);
+
+  async function onSubmit(e) {
     e.preventDefault();
+    if (latitude === 0 || longitude === 0) {
+      getCoordinates();
+      toast.error('Please enable location and try again');
+      return;
+    }
+    if (images.length < 1) {
+      toast.error('Please add at least one image');
+      return;
+    }
+    if (images.length > 6) {
+      toast.error('Max 6 images');
+      return;
+    }
+    if (!name || !description) {
+      toast.error('Please fill in all fields');
+      return;
+    }
+    setLoading(true);
+    const imagesUrls = await Promise.all(
+      [...images].map((image) => storeImage(image))
+    ).catch(() => {
+      toast.error('Images not uploaded');
+      return;
+    });
+
+    console.log(imagesUrls);
+    const formDataCopy = {
+      ...FormData,
+      images: imagesUrls,
+      geolocation: {
+        latitude,
+        longitude,
+      },
+      timestamp: serverTimestamp(),
+    };
+    !formDataCopy.offer && delete formDataCopy.discountedPrice;
+
+    const docRef = await addDoc(collection(db, 'listings'), formDataCopy);
+    setLoading(false);
+    toast.success('Listing created');
+    navigate('/category/' + formDataCopy.type + '/' + docRef.id);
+  }
+
+  const storeImage = async (image) => {
+    return new Promise((resolve, reject) => {
+      const fileName = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`;
+      const storageRef = ref(storage, `images/${fileName}`);
+      const uploadTask = uploadBytesResumable(storageRef, image);
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+        },
+        (error) => {
+          reject(error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            resolve(downloadURL);
+          });
+        }
+      );
+    });
+  };
+
+  if (loading) {
+    return <Spinner />;
   }
   return (
     <main className="max-w-md mx-auto px-2 pb-10">
@@ -136,7 +282,7 @@ function CreateListing() {
           maxLength="32"
           placeholder="Name"
           type="text"
-          minLength="10"
+          minLength="5"
           value={name}
           className={styles.input}
           onChange={(e) => setFormData({ ...FormData, name: e.target.value })}
@@ -208,12 +354,48 @@ function CreateListing() {
           id="address"
           placeholder="Address"
           type="text"
-          value={address}
+          value={address || location}
           className={styles.input}
           onChange={(e) =>
             setFormData({ ...FormData, address: e.target.value })
           }
         />
+
+        {/* Latitude */}
+        <div>
+          <TitleComponent title="Latitude" />
+          <input
+            id="latitude"
+            type="number"
+            value={latitude}
+            min="-90"
+            max="90"
+            step="any"
+            required
+            className={styles.input}
+            onChange={(e) =>
+              setFormData({ ...FormData, latitude: e.target.value })
+            }
+          />
+        </div>
+        {/* Longitude */}
+        <div>
+          <TitleComponent title="Longitude" />
+          <input
+            id="longitude"
+            type="number"
+            value={longitude}
+            min="-180"
+            max="180"
+            step="any"
+            required
+            className={styles.input}
+            onChange={(e) =>
+              setFormData({ ...FormData, longitude: e.target.value })
+            }
+          />
+        </div>
+
         {/* Description */}
         <TitleComponent title="Description" />
         <textarea
