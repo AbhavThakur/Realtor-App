@@ -50,7 +50,7 @@ function App() {
           ),
         },
         {
-          path: '/category/:categoryName/:listingId',
+          path: '/category/:categoryId',
           element: (
             <PrivateRoute>
               <Category />

@@ -218,6 +218,7 @@ function CreateListing() {
         latitude,
         longitude,
       },
+      userRef: auth.currentUser.uid,
       timestamp: serverTimestamp(),
     };
     !formDataCopy.offer && delete formDataCopy.discountedPrice;
@@ -441,7 +442,7 @@ function CreateListing() {
           />
           {type === 'rent' && (
             <p className="text-xl w-1/3 text-right whitespace-nowrap">
-              $ / Month
+              rs / Month
             </p>
           )}
         </div>
@@ -473,7 +474,8 @@ function CreateListing() {
         {/* Images  */}
         <TitleComponent title="Images" />
         <p className="text-sm mb-2">
-          The first image will be the cover (max 6)
+          The first image will be the cover (max 6 images) & images should be
+          less than 2MB.
         </p>
         <input
           type="file"

@@ -1,15 +1,24 @@
 import { updateProfile } from 'firebase/auth';
-import { doc, updateDoc } from 'firebase/firestore';
-import React, { useState } from 'react';
+import {
+  collection,
+  doc,
+  getDocs,
+  orderBy,
+  query,
+  updateDoc,
+  where,
+} from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
 import { FcHome } from 'react-icons/fc';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { FormButton } from '../components';
 import { auth, db } from '../config/firebase';
 import { SignOut } from '../hooks/AuthProvider';
-
 function Profile() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [listings, setListings] = useState([]);
   const [FormData, setFormData] = useState({
     name: auth.currentUser?.displayName,
     email: auth.currentUser?.email,
@@ -18,6 +27,55 @@ function Profile() {
   const [changeName, setChangeName] = useState(false);
 
   const { name, email } = FormData;
+
+  useEffect(() => {
+    setLoading(true);
+    const callListingsData = async () => {
+      const userId = auth.currentUser.uid;
+      const q = query(
+        collection(db, 'listings'),
+        where('userRef', '==', userId),
+        orderBy('timestamp', 'desc')
+      );
+      const querySnapshot = await getDocs(q);
+
+      let listings = [];
+
+      querySnapshot.forEach((doc) => {
+        return listings.push({
+          id: doc.id,
+          data: doc.data(),
+        });
+      });
+      setListings(listings);
+      setLoading(false);
+    };
+
+    // Call the function to retrieve the listings data
+    callListingsData();
+  }, []);
+
+  const ListingItem = ({
+    id,
+    data: { name, description, images },
+    navigate,
+  }) => (
+    <div
+      key={id}
+      onClick={() => navigate(`/category/${id}`)}
+      className="mb-5  bg-gray-100 rounded-2xl shadow-md cursor-pointer hover:shadow-lg transition duration-150 ease-in-out"
+    >
+      <div className="flex flex-col items-center justify-center">
+        <img
+          className="w-full  object-cover rounded-tl-2xl rounded-tr-2xl"
+          src={images}
+          alt=""
+        />
+        <h2>{name}</h2>
+        <p>{description}</p>
+      </div>
+    </div>
+  );
 
   const onSubmit = async () => {
     if (!name) {
@@ -106,6 +164,25 @@ function Profile() {
           />
         </div>
       </section>
+      <div className="max-w-6xl mx-auto mt-6 px-3">
+        {!loading && listings.length > 0 && (
+          <>
+            <h2 className="text-2xl font-semibold text-center mb-4">
+              My listings
+            </h2>
+            <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  gap-8">
+              {listings.map((listing) => (
+                <ListingItem
+                  key={listing.id}
+                  id={listing.id}
+                  data={listing.data}
+                  navigate={navigate}
+                />
+              ))}
+            </ul>
+          </>
+        )}
+      </div>
     </>
   );
 }
