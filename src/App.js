@@ -50,7 +50,7 @@ function App() {
           ),
         },
         {
-          path: '/category/:categoryId',
+          path: '/category/:type/:id',
           element: (
             <PrivateRoute>
               <Category />

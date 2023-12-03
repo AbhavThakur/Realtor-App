@@ -226,7 +226,8 @@ function CreateListing() {
     const docRef = await addDoc(collection(db, 'listings'), formDataCopy);
     setLoading(false);
     toast.success('Listing created');
-    navigate('/category/' + formDataCopy.type + '/' + docRef.id);
+    navigate(`/profile`);
+    // navigate('/category/' + formDataCopy.type + '/' + docRef.id);
   }
 
   const storeImage = async (image) => {

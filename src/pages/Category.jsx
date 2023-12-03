@@ -1,17 +1,36 @@
-import { useSearchParams } from 'react-router-dom';
+import { collection, getDoc } from 'firebase/firestore';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { db } from '../config/firebase';
 
 function Category() {
-  const [searchParams] = useSearchParams();
+  const location = useLocation();
 
-  const categoryId = searchParams.get('category');
-  console.warn(
-    '🚀👨🏻‍💻👍 ~ file: Category.jsx:6 ~ Category ~ categoryId:',
-    categoryId
-  );
+  const type = location.pathname.split('/')[2];
+  const id = location.pathname.split('/')[3];
 
-  if (!categoryId) {
-    return <div>Category</div>;
-  }
+  useEffect(() => {
+    const getCategoryDetails = async () => {
+      try {
+        const docRef = collection(db, `listings/${id}`);
+        const doc = await getDoc(docRef);
+        if (doc.exists) {
+          const data = doc.data();
+          console.warn(
+            '🚀👨🏻‍💻👍 ~ file: Category.jsx:25 ~ getCategoryDetails ~ data:',
+            data
+          );
+          // Do something with the category details
+        } else {
+          console.log('No category found');
+        }
+      } catch (error) {
+        console.error('Error getting category details:', error);
+      }
+    };
+
+    getCategoryDetails();
+  }, []);
 
   return <div>Category</div>;
 }

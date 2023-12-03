@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react';
 import { FcHome } from 'react-icons/fc';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { FormButton } from '../components';
+import { FormButton, ListingItem } from '../components';
 import { auth, db } from '../config/firebase';
 import { SignOut } from '../hooks/AuthProvider';
 function Profile() {
@@ -54,28 +54,6 @@ function Profile() {
     // Call the function to retrieve the listings data
     callListingsData();
   }, []);
-
-  const ListingItem = ({
-    id,
-    data: { name, description, images },
-    navigate,
-  }) => (
-    <div
-      key={id}
-      onClick={() => navigate(`/category/${id}`)}
-      className="mb-5  bg-gray-100 rounded-2xl shadow-md cursor-pointer hover:shadow-lg transition duration-150 ease-in-out"
-    >
-      <div className="flex flex-col items-center justify-center">
-        <img
-          className="w-full  object-cover rounded-tl-2xl rounded-tr-2xl"
-          src={images}
-          alt=""
-        />
-        <h2>{name}</h2>
-        <p>{description}</p>
-      </div>
-    </div>
-  );
 
   const onSubmit = async () => {
     if (!name) {
