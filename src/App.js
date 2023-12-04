@@ -51,7 +51,7 @@ function App() {
           ),
         },
         {
-          path: '/edit-listing/:id',
+          path: '/edit-listing/:listingId',
           element: (
             <PrivateRoute>
               <EditListing />

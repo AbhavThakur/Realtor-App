@@ -1,4 +1,4 @@
-import { collection, getDoc } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { db } from '../config/firebase';
@@ -12,10 +12,10 @@ function Category() {
   useEffect(() => {
     const getCategoryDetails = async () => {
       try {
-        const docRef = collection(db, `listings/${id}`);
-        const doc = await getDoc(docRef);
+        const docRef = doc(db, 'listings', id);
+        const docSnap = await getDoc(docRef);
         if (doc.exists) {
-          const data = doc.data();
+          const data = docSnap.data();
           console.warn(
             '🚀👨🏻‍💻👍 ~ file: Category.jsx:25 ~ getCategoryDetails ~ data:',
             data
