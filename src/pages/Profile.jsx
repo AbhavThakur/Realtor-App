@@ -1,6 +1,7 @@
 import { updateProfile } from 'firebase/auth';
 import {
   collection,
+  deleteDoc,
   doc,
   getDocs,
   orderBy,
@@ -54,6 +55,20 @@ function Profile() {
     // Call the function to retrieve the listings data
     callListingsData();
   }, []);
+
+  const onDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this listing?')) {
+      await deleteDoc(doc(db, 'listings', id));
+      const updatedListings = listings.filter((listing) => listing.id !== id);
+      setListings(updatedListings);
+      toast.success('Successfully deleted listing');
+    } else {
+      toast.error('Error deleting listing');
+    }
+  };
+  const onEdit = (id) => {
+    navigate(`/edit-listing/${id}`);
+  };
 
   const onSubmit = async () => {
     if (!name) {
@@ -154,7 +169,12 @@ function Profile() {
                   key={listing.id}
                   id={listing.id}
                   data={listing.data}
-                  navigate={navigate}
+                  onDelete={() => {
+                    onDelete(listing.id);
+                  }}
+                  onEdit={() => {
+                    onEdit(listing.id);
+                  }}
                 />
               ))}
             </ul>

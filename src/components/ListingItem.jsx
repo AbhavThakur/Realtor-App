@@ -1,5 +1,5 @@
 import React from 'react';
-import { MdLocationOn } from 'react-icons/md';
+import { MdDelete, MdEdit, MdLocationOn } from 'react-icons/md';
 import Moment from 'react-moment';
 import { Link } from 'react-router-dom';
 
@@ -20,7 +20,8 @@ const ListingItem = ({
     parking,
     furnished,
   },
-  navigate,
+  onEdit,
+  onDelete,
 }) => (
   <li
     key={id}
@@ -61,17 +62,33 @@ const ListingItem = ({
         <div className="flex items-center mt-[10px] space-x-3">
           <div className="flex items-center space-x-1">
             <p className="font-bold text-sm">
-              {bedrooms} {bedrooms > 1 ? 'Bedrooms' : 'Bedroom'}
+              {bedrooms} {bedrooms > 1 ? 'Beds' : 'Bed'}
             </p>
           </div>
           <div className="flex items-center space-x-1">
             <p className="font-bold text-sm">
-              {bathrooms} {bathrooms > 1 ? 'Bathrooms' : 'Bathroom'}
+              {bathrooms} {bathrooms > 1 ? 'Baths' : 'Bath'}
             </p>
           </div>
         </div>
       </div>
     </Link>
+    {onDelete && (
+      <div>
+        <MdDelete
+          className="absolute bottom-2 right-2 h-5 w-5 text-red-500 cursor-pointer"
+          onClick={onDelete}
+        />
+      </div>
+    )}
+    {onEdit && (
+      <div>
+        <MdEdit
+          className="absolute bottom-2 right-8 h-5 w-5 text-blue-500 cursor-pointer"
+          onClick={onEdit}
+        />
+      </div>
+    )}
   </li>
 );
 

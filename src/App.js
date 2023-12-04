@@ -7,6 +7,7 @@ import { PrivateRedirectProfileRoute, PrivateRoute } from './components';
 import {
   Category,
   CreateListing,
+  EditListing,
   ErrorPage,
   ForgotPassword,
   Home,
@@ -46,6 +47,14 @@ function App() {
           element: (
             <PrivateRoute>
               <CreateListing />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: '/edit-listing/:id',
+          element: (
+            <PrivateRoute>
+              <EditListing />
             </PrivateRoute>
           ),
         },
