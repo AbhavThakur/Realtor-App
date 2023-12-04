@@ -22,48 +22,57 @@ const ListingItem = ({
   },
   navigate,
 }) => (
-  <div
+  <li
     key={id}
-    className="mb-5  bg-gray-100 rounded-2xl shadow-md cursor-pointer hover:shadow-lg transition duration-150 ease-in-out"
+    className="relative flex flex-col items-center justify-between mb-5  bg-white rounded-2xl shadow-md cursor-pointer hover:shadow-lg transition duration-150 ease-in-out overflow-hidden m-[10px]"
   >
-    <Link to={`/category/${type}/${id}`}>
-      <div className="flex flex-col items-center justify-center">
-        <img
-          className="w-full  object-cover rounded-tl-2xl rounded-tr-2xl"
-          src={images[0]}
-          alt=""
-        />
-        <Moment fromNow>{timestamp?.toDate()}</Moment>
+    <Link className="contents" to={`/category/${type}/${id}`}>
+      <img
+        className="h-[170px] w-full object-cover hover:scale-105 transition duration-200 ease-in"
+        loading="lazy"
+        src={images[0]}
+        alt=""
+      />
+      <Moment
+        className="absolute top-2 left-2 bg-[#3377cc] text-white uppercase text-xs font-semibold rounded-md px-2 py-1 shadow-lg "
+        fromNow
+      >
+        {timestamp?.toDate()}
+      </Moment>
+      {/* Text Container */}
+      <div className="w-full p-[10px]">
         {/* address */}
         <div className="flex items-center space-x-1">
-          <MdLocationOn />
-          <p>{address}</p>
+          <MdLocationOn className="h-4 w-4 text-green-600" />
+          <p className="font-semibold text-sm text-gray-600 truncate">
+            {address}
+          </p>
         </div>
         {/*  */}
-        <h2>{name}</h2>
-        <p>
+        <p className="font-bold m-0 text-xl  truncate">{name}</p>
+        <p className="text-[#457b9d] mt-2 font-semibold">
           $
           {offer
             ? discountedPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
             : regularPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           {type === 'rent' && ' / month'}
         </p>
-        {/* bedrooms */}
-        <div>
-          <div>
-            <p>
+        {/* bedrooms & bathrooms container */}
+        <div className="flex items-center mt-[10px] space-x-3">
+          <div className="flex items-center space-x-1">
+            <p className="font-bold text-sm">
               {bedrooms} {bedrooms > 1 ? 'Bedrooms' : 'Bedroom'}
             </p>
           </div>
-          <div>
-            <p>
+          <div className="flex items-center space-x-1">
+            <p className="font-bold text-sm">
               {bathrooms} {bathrooms > 1 ? 'Bathrooms' : 'Bathroom'}
             </p>
           </div>
         </div>
       </div>
     </Link>
-  </div>
+  </li>
 );
 
 export default ListingItem;
