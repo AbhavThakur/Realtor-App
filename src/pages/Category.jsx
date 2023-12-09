@@ -1,9 +1,12 @@
 import { doc, getDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
+import { FaShare } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import 'swiper/css/bundle';
 import { Autoplay, EffectFade, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
+
 import Spinner from '../components/Spinner';
 import { db } from '../config/firebase';
 
@@ -39,11 +42,18 @@ function Category() {
 
     getCategoryDetails();
   }, [params.listingId]);
-
+  async function copyUrlToClipboard() {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast.success('Link copied to clipboard!');
+    } catch (err) {
+      console.error('Failed to copy URL:', err);
+    }
+  }
   if (loading) return <Spinner />;
 
   return (
-    <div>
+    <main>
       <Swiper
         slidesPerView={1}
         navigation
@@ -70,10 +80,15 @@ function Category() {
           </SwiperSlide>
         ))}
       </Swiper>
+      <div className="fixed top-[13%] right-[2%] z-10 bg-white cursor-pointer border-2 border-gray-400 rounded-full w-12 h-12 flex items-center justify-center">
+        <button onClick={copyUrlToClipboard} aria-label="Share">
+          <FaShare size={20} className="text-slate-400" />
+        </button>
+      </div>
 
       <h1>{listings.title}</h1>
       <p>{listings.description}</p>
-    </div>
+    </main>
   );
 }
 
