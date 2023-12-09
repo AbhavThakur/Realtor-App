@@ -19,3 +19,7 @@ export var options = {
   timeout: 5000,
   maximumAge: 0,
 };
+
+export function Price(price) {
+  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}

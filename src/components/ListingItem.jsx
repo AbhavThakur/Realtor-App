@@ -2,6 +2,7 @@ import React from 'react';
 import { MdDelete, MdEdit, MdLocationOn } from 'react-icons/md';
 import Moment from 'react-moment';
 import { Link } from 'react-router-dom';
+import { Price } from '../utils/helper';
 
 const ListingItem = ({
   id,
@@ -52,10 +53,7 @@ const ListingItem = ({
         {/*  */}
         <p className="font-bold m-0 text-xl  truncate">{name}</p>
         <p className="text-[#457b9d] mt-2 font-semibold">
-          $
-          {offer
-            ? discountedPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-            : regularPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          ${offer ? Price(discountedPrice) : Price(regularPrice)}
           {type === 'rent' && ' / month'}
         </p>
         {/* bedrooms & bathrooms container */}
