@@ -21,3 +21,12 @@ body {
 .LinkButtonRight {
   @apply text-blue-600 hover:text-blue-800 hover:underline cursor-pointer transition duration-200 ease-in-out;
 }
+
+.swiper-button-next:after,
+.swiper-button-prev:after {
+  color: #f0f9f4;
+}
+
+.swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
+  background: #f0f9f4 !important;
+}
