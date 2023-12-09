@@ -60,11 +60,7 @@ function App() {
         },
         {
           path: '/category/:categoryName/:listingId',
-          element: (
-            <PrivateRoute>
-              <Category />
-            </PrivateRoute>
-          ),
+          element: <Category />,
         },
         {
           path: '/sign-in',

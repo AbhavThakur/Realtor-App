@@ -63,7 +63,7 @@ function Profile() {
       setListings(updatedListings);
       toast.success('Successfully deleted listing');
     } else {
-      toast.error('Error deleting listing');
+      toast.error('Cancel deleting listing');
     }
   };
   const onEdit = (id) => {

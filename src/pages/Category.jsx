@@ -14,8 +14,9 @@ import 'swiper/css/bundle';
 import { Autoplay, EffectFade, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import { ContactForm } from '../components';
 import Spinner from '../components/Spinner';
-import { db } from '../config/firebase';
+import { auth, db } from '../config/firebase';
 import { Price } from '../utils/helper';
 
 function Category() {
@@ -23,6 +24,7 @@ function Category() {
 
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [Contact, setContact] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -58,6 +60,7 @@ function Category() {
       console.error('Failed to copy URL:', err);
     }
   }
+
   if (loading) return <Spinner />;
 
   return (
@@ -97,9 +100,9 @@ function Category() {
       {/* --- End of share --- */}
 
       {/* Map and Info */}
-      <div className="flex flex-col md:flex-row  max-w-6xl lg:mx-auto p-4 rounded-lg shadow-lg  bg-white lg:space-x-5">
+      <div className="flex flex-col md:flex-row  max-w-6xl lg:mx-auto p-4 rounded-lg shadow-lg  bg-white lg:space-x-5 mt-4">
         {/* Info */}
-        <div className=" w-full h-[200px] lg-[400px]">
+        <div className=" w-full  mr-2">
           <p className="text-2xl font-bold mb-3 text-blue-700 ">
             {listings.name} - Rs{' '}
             {listings.offer
@@ -121,11 +124,14 @@ function Category() {
               </p>
             )}
           </div>
+          {/* Description */}
           <p className="mt-3 mb-3">
             <span className="font-semibold">Description - </span>
             {listings.description}
           </p>
-          <ul className="mb-3 flex items-center space-x-2 sm:space-x-10 text-sm">
+          {/* --- End of description --- */}
+          {/* List of amenities */}
+          <ul className="mb-4 flex items-center space-x-2 sm:space-x-10 text-sm">
             <li className="flex items-center whitespace-nowrap">
               <FaBed className="text-red-500 mr-1" />
               {listings.bedrooms > 1
@@ -147,6 +153,24 @@ function Category() {
               {listings.furnished ? 'Furnished' : 'Not Furnished'}
             </li>
           </ul>
+          {/* End of list of amenities */}
+          {/* Contact */}
+          {listings.userRef !== auth.currentUser?.uid && (
+            <div>
+              {Contact ? (
+                <ContactForm listing={listings} userRef={listings.userRef} />
+              ) : (
+                <button
+                  onClick={() => setContact(true)}
+                  className="w-full bg-blue-700 text-white font-medium rounded-md px-4 py-2 hover:bg-blue-800 shadow-md hover:shadow-lg transition duration-150 ease-in-out"
+                >
+                  Contact Agent
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* End of contact */}
         </div>
         {/* --- End of info --- */}
         <div className="bg-red-400 w-full h-[200px] lg-[400px] z-10 overflow-x-hidden"></div>

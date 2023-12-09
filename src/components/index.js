@@ -1,3 +1,4 @@
+export { default as ContactForm } from './ContactForm';
 export { default as FormButton } from './FormButton';
 export { default as Header } from './Header';
 export { default as ListingItem } from './ListingItem';
