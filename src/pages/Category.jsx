@@ -8,6 +8,7 @@ import {
   FaParking,
   FaShare,
 } from 'react-icons/fa';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'swiper/css/bundle';
@@ -37,11 +38,6 @@ function Category() {
 
           setListings(data);
           setLoading(false);
-          console.warn(
-            '🚀👨🏻‍💻👍 ~ file: Category.jsx:25 ~ getCategoryDetails ~ data:',
-            data
-          );
-          // Do something with the category details
         } else {
           console.log('No category found');
         }
@@ -131,17 +127,17 @@ function Category() {
           </p>
           {/* --- End of description --- */}
           {/* List of amenities */}
-          <ul className="mb-4 flex items-center space-x-2 sm:space-x-10 text-sm">
+          <ul className="mb-4 flex items-center space-x-2 sm:space-x-10 text-sm font-medium">
             <li className="flex items-center whitespace-nowrap">
               <FaBed className="text-red-500 mr-1" />
               {listings.bedrooms > 1
-                ? `${listings.bedrooms} Bedrooms`
+                ? `${listings.bedrooms} Beds`
                 : '1 Bedroom'}
             </li>
             <li className="flex items-center whitespace-nowrap">
               <FaBath className="text-red-500 mr-1" />
               {listings.bathrooms > 1
-                ? `${listings.bathrooms} Bathrooms`
+                ? `${listings.bathrooms} Baths`
                 : '1 Bathroom'}
             </li>
             <li className="flex items-center whitespace-nowrap">
@@ -173,7 +169,30 @@ function Category() {
           {/* End of contact */}
         </div>
         {/* --- End of info --- */}
-        <div className="bg-red-400 w-full h-[200px] lg-[400px] z-10 overflow-x-hidden"></div>
+        <div className="bg-red-400 w-full h-[200px] md:h-[400px] z-10 overflow-x-hidden">
+          <MapContainer
+            center={[
+              listings.geolocation.latitude,
+              listings.geolocation.longitude,
+            ]}
+            zoom={13}
+            scrollWheelZoom={false}
+            style={{ height: '100%', width: '100%' }}
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <Marker
+              position={[
+                listings.geolocation.latitude,
+                listings.geolocation.longitude,
+              ]}
+            >
+              <Popup>{listings.address}</Popup>
+            </Marker>
+          </MapContainer>
+        </div>
       </div>
       {/* --- End of map and info --- */}
     </main>
