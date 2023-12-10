@@ -271,10 +271,10 @@ function CreateListing() {
             onClick={() => setFormData({ ...FormData, type: 'rent' })}
           />
           <ButtonOptionComponent
-            title="Sell"
+            title="Sale"
             category="type"
-            onClick={() => setFormData({ ...FormData, type: 'sell' })}
-            typeValue="sell"
+            onClick={() => setFormData({ ...FormData, type: 'sale' })}
+            typeValue="sale"
           />
         </div>
         {/* Name */}

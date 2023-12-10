@@ -30,3 +30,7 @@ body {
 .swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
   background: #f0f9f4 !important;
 }
+
+html::-webkit-scrollbar {
+  display: none;
+}

@@ -71,9 +71,9 @@ function Slider() {
               {listings.data.name}
             </p>
             <p className="text-[#f1faee] absolute left-1 bottom-3 font-semibold max-w-[90%] bg-[#e63946] shadow-lg opacity-90 p-2 rounded-tr-3xl">
-              $
+              ${' '}
               {Price(listings.data.discountedPrice) ??
-                listings.data.regularPrice}
+                Price(listings.data.regularPrice)}
               {listings.data.type === 'rent' && ' / month'}
             </p>
           </SwiperSlide>
