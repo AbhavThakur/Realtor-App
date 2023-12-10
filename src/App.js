@@ -6,6 +6,7 @@ import { PrivateRedirectProfileRoute, PrivateRoute } from './components';
 
 import {
   Category,
+  CategoryType,
   CreateListing,
   EditListing,
   ErrorPage,
@@ -61,6 +62,10 @@ function App() {
         {
           path: '/category/:categoryName/:listingId',
           element: <Category />,
+        },
+        {
+          path: '/category/:categoryName',
+          element: <CategoryType />,
         },
         {
           path: '/sign-in',
