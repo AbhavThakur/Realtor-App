@@ -11,6 +11,7 @@ import {
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+// Swiper
 import 'swiper/css/bundle';
 import { Autoplay, EffectFade, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -176,7 +177,7 @@ function Category() {
               listings.geolocation.longitude,
             ]}
             zoom={13}
-            scrollWheelZoom={false}
+            scrollWheelZoom={true}
             style={{ height: '100%', width: '100%' }}
           >
             <TileLayer
